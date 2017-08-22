@@ -16,6 +16,11 @@
 
     //initial values from the database
 
+
+
+    //database.ref().on("value", function(snapshot) {
+
+    
     // function to create the new row
     function addRow(name, role, start, rate) {
       var monthsworked = 12;
@@ -24,13 +29,20 @@
       var newRow = $("<tr>").append( $("<td>").text(name) )
                             .append( $("<td>").text(role) )
                             .append( $("<td>").text(start) )
-                            .append( $("<td>").text(monthsworked) )
+                            .append( $("<td>").text(monthsWorked) )
                             .append( $("<td>").text(rate) )
                             .append( $("<td>").text(total) );
       $("tbody").append(newRow);
+
+      database.ref().set({
+      	name:name,
+      	role : role,
+      	start: start,
+      	rate: rate
+      })
     };
 
-
+	//});	
  // submit button to push the data up to the employees table
 $("#submit-button").on("click", function(event){
 	 event.preventDefault();
@@ -38,7 +50,7 @@ $("#submit-button").on("click", function(event){
 	var name = $("#name").val().trim();
 	var role = $("#role").val().trim();
 	var start = $("#startDate").val().trim();
-	var rate = $("#monthyRate").val().trim();
+	var rate = $("#monthyRate").val();
 
 	addRow(name, role, start, rate);
 	console.log("clicked");
