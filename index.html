@@ -13,6 +13,20 @@
     <!-- Firebase Reference -->
     <!-- <script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script> -->
     <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script type="text/javascript">
+    function addRow(name, role, start, rate) {
+      var monthsworked = 12;
+      var total = "total!";
+
+      var newRow = $("<tr>").append( $("<td>").text(name) )
+                            .append( $("<td>").text(role) )
+                            .append( $("<td>").text(start) )
+                            .append( $("<td>").text(monthsworked) )
+                            .append( $("<td>").text(rate) )
+                            .append( $("<td>").text(total) );
+      $("tbody").append(newRow);
+    };
+    </script>
 
   </head>
   <body>
