@@ -14,41 +14,58 @@
     //creating a variable to reference the database
     var database = firebase.database();
 
-    // initial values from the database
+    //is this the initial load? (Used when drawing all previous items)
+    // var initial = true;
 
+    // TODO set html to the values from the database
+    database.ref().on("value", function(snap) {
+    //
+      console.log(snap.val());
+    //
+    //   if (initial) {
+    //     addRow(all)
+    //   } else {
+    //     addRow()
+    //   }
+    //
+    });
 
+    // This is triggered for each item in the database on load.
+    database.ref().on("child_added", function(snap) {
+    // addRow by name, role, start, rate
+    addRow(snap.val().name,snap.val().role, snap.val().start, snap.val().rate);
+    });
 
-    //database.ref().on("value", function(snapshot) {
+    //TODO This works.
+    // database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
+    //   console.log("orderByChild");
+    //   console.log(snapshot.val());
+    // });
 
+    //Returns the difference of two dates in months, uses MomentJS
+    function findMonthsWorked(inputDate) {
+      return moment().diff(moment(inputDate), 'months')
+    }
+
+    //Returns the total value paid to the employee
+    function findTotalPaid(rate, months) {
+      return rate * months;
+    }
 
     // function to create the new row
     function addRow(name, role, start, rate) {
-      var monthsworked = 12;
-      var total = "total!";
+      var monthsworked = findMonthsWorked(start);
 
       var newRow = $("<tr>").append( $("<td>").text(name) )
                             .append( $("<td>").text(role) )
                             .append( $("<td>").text(start) )
-                            // .append( $("<td>").text(monthsWorked) )
+                            .append( $("<td>").text(monthsworked) )
                             .append( $("<td>").text(rate) )
-                            .append( $("<td>").text(total) );
+                            .append( $("<td>").text(findTotalPaid(rate, monthsworked)) );
       $("tbody").append(newRow);
 
-      // if (true) {
-      //   database.ref().set({
-      //     "name": name,
-      //     "role" : role,
-      //     "start": start,
-      //     "rate": rate
-      //   })
-      // } else {
-        database.ref().push({
-          "name": name,
-          "role" : role,
-          "start": start,
-          "rate": rate
-        })
-      
+
+
 
     };
 
@@ -66,8 +83,14 @@ $("#submit-button").on("click", function(event){
   // console.log(start);
   // console.log(rate);
 
+  database.ref().push({
+    "name": name,
+    "role" : role,
+    "start": start,
+    "rate": rate
+  })
 
-	addRow(name, role, start, rate);
-	console.log("clicked");
+	// addRow(name, role, start, rate);
+	// console.log("clicked");
 
 });
